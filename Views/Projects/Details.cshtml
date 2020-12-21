@@ -1,0 +1,106 @@
+﻿@model DBMSProjet.Database.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BusinessName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceCharge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceCharge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ConsultantFee)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ConsultantFee)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PersonnelCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PersonnelCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Client1.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Client1.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee1.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee1.FirstName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,42 @@
+﻿@model DBMSProjet.Database.WorkerAllocation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>WorkerAllocation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkingDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.ProjectName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
