@@ -3,81 +3,134 @@
     ViewBag.Title = "_Sidebar";
 }
 
-<div class="wrapper ">
-    <div class="sidebar" data-color="purple" data-background-color="white">
+<head>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="purple" data-background-color="white" data-image="D:/DBMS/Template/img/build.jpg">
         <!--
             Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
             Tip 2: you can also add an image using data-image tag
         -->
         @*<div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                CT
+                <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+                    CT
+                </a>
+                <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+                    Creative Tim
+                </a>
+            </div>*@
+        <div class="logo">
+            <a href="#" class="simple-text logo-normal">
+                MAC Builders
             </a>
-            <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                Creative Tim
-            </a>
-        </div>*@
+        </div>
         <div class="sidebar-wrapper">
-    <ul class="nav">
-        <li class="nav-item active  ">
-            <a class="nav-link" href="#0">
-                <i class="material-icons"></i>
-                <p>Dashboard</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./user.html">
-                <i class="material-icons"></i>
-                <p>User Profile</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./tables.html">
-                <i class="material-icons"></i>
-                <p>Table List</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./typography.html">
-                <i class="material-icons"></i>
-                <p>Typography</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./icons.html">
-                <i class="material-icons"></i>
-                <p>Icons</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./map.html">
-                <i class="material-icons"></i>
-                <p>Maps</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./notifications.html">
-                <i class="material-icons"></i>
-                <p>Notifications</p>
-            </a>
-        </li>
-        <li class="nav-item ">
-            <a class="nav-link" href="./rtl.html">
-                <i class="material-icons"></i>
-                <p>RTL Support</p>
-            </a>
-        </li>
-        <li class="nav-item active-pro ">
-            <a class="nav-link" href="./upgrade.html">
-                <i class="material-icons"></i>
-                <p>Upgrade to PRO</p>
-            </a>
-        </li>
-        <!-- your sidebar here -->
-    </ul>
+            <ul class="nav">
+                <!--Admin-->
+                <li class="nav-item active  ">
+                    <a class="nav-link">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Projects/Index">
+                        <i class="material-icons">person</i>
+                        <p>Project</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Employees/Index">
+                        <i class="material-icons">person</i>
+                        <p>Employee</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Clients/Index">
+                        <i class="material-icons">person</i>
+                        <p>Clients</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Equipments/Index">
+                        <i class="material-icons">person</i>
+                        <p>Equipments</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Suppliers/Index">
+                        <i class="material-icons">person</i>
+                        <p>Supplier</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/EquipmentAllocations/Create">
+                        <i class="material-icons">person</i>
+                        <p>Equipment Allocation</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="WorkerAllocations/Create">
+                        <i class="material-icons">person</i>
+                        <p>Workers Allocation</p>
+                    </a>
+                </li>
 
-    </div>       
+                <!--Consultant-->
+                <li class="nav-item active  ">
+                    <a class="nav-link">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Projects/Create">
+                        <i class="material-icons">person</i>
+                        <p>Project requirement form</p>
+                    </a>
+                </li>
+
+                <!--Customer-->
+                <li class="nav-item active  ">
+                    <a class="nav-link">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/Projects/Index">
+                        <i class="material-icons">person</i>
+                        <p>Project Details</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
     </div>
- </div>
+</div>
 
+<!-- Navbar -->
+<nav class="navbar navbar-expand-sm navbar-transparent navbar-absolute fixed-top" style="margin-left:0%">
+    <div class="container-fluid">
+
+        <div class="collapse navbar-collapse justify-content-end">
+            <form class="navbar-form">
+                <div class="input-group no-border">
+                    <input type="text" value="" class="form-control" placeholder="Search...">
+                    <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                        <span class="glyphicon glyphicon-search"></span>
+                        <div class="ripple-container"></div>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</nav>
