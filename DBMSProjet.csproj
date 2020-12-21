@@ -311,6 +311,8 @@
     <Content Include="Views\WorkerAllocations\Details.cshtml" />
     <Content Include="Views\WorkerAllocations\Edit.cshtml" />
     <Content Include="Views\WorkerAllocations\Index.cshtml" />
+    <Content Include="Views\Shared\_Sidebar.cshtml" />
+    <Content Include="Views\Shared\_SidebarNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
