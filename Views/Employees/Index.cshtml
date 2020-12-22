@@ -16,7 +16,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">Employees</h4>
+                        <h3 class="card-title ">Employees</h3>
                         
                     </div>
                     <div class="card-body">
@@ -90,9 +90,9 @@
                                             @Html.DisplayFor(modelItem => item.JobRate.JobTitle)
                                         </td>
                                         <td>
-                                            @Html.ActionLink("Edit", "Edit", new { id = item.EmployeeID }) |
-                                            @Html.ActionLink("Details", "Details", new { id = item.EmployeeID }) |
-                                            @Html.ActionLink("Delete", "Delete", new { id = item.EmployeeID })
+                                            @Html.ActionLink(" ", "Edit", new { id = item.EmployeeID }, new { @class = "glyphicon glyphicon-pencil" }) |
+                                            @Html.ActionLink(" ", "Details", new { id = item.EmployeeID }, new { @class = "glyphicon glyphicon-log-in" }) |
+                                            @Html.ActionLink(" ", "Delete", new { id = item.EmployeeID }, new { @class = "glyphicon glyphicon-trash" })
                                         </td>
                                     </tr>
                                 }
