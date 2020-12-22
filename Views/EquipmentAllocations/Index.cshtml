@@ -9,43 +9,63 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Duration)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Qty)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Equipment.EquipmentName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Project.ProjectName)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Duration)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Qty)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Equipment.EquipmentName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Project.ProjectName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title ">Simple Table</h4>
+                        <p class="card-category"> Here is a subtitle for this table</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Duration)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Qty)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Equipment.EquipmentName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Project.ProjectName)
+                                    </th>
+                                    <th></th>
+                                </tr>
 
-</table>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Duration)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Qty)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Equipment.EquipmentName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Project.ProjectName)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
