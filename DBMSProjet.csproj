@@ -136,6 +136,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProjectPaymentsController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SuppliersController.cs" />
     <Compile Include="Controllers\WorkerAllocationsController.cs" />
     <Compile Include="Database\Client.cs">
@@ -331,6 +332,7 @@
     <Content Include="Views\WorkerAllocations\Index.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Shared\_SidebarNew.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
