@@ -24,6 +24,7 @@
         <AssociationConnector Association="MACBuildersModel.FK_ProjectPayment_Project" ManuallyRouted="false" />
         <AssociationConnector Association="MACBuildersModel.FK_WorkerAllocation_Project" ManuallyRouted="false" />
         <AssociationConnector Association="MACBuildersModel.SupplierHiring" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MACBuildersModel.UserManagement" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

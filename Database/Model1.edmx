@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MACBuildersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MACBuildersModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="ClientID" />
@@ -86,7 +86,7 @@
           <Property Name="PaymentType" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="PaymentDate" Type="smalldatetime" Nullable="false" />
-          <Property Name="InvoiceNo" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="InvoiceNo" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
@@ -108,6 +108,18 @@
           </Key>
           <Property Name="SupplierID" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="ProjectID" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'MACBuilders.dbo.UserManagement' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="UserManagement">
+          <Key>
+            <PropertyRef Name="LoginName" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="UserCategory" />
+          </Key>
+          <Property Name="LoginName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="UserCategory" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="WorkerAllocation">
           <Key>
@@ -261,6 +273,13 @@
           <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SupplierHiring" EntityType="Self.SupplierHiring" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkerAllocation" EntityType="Self.WorkerAllocation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserManagement" EntityType="Self.UserManagement" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[UserManagement].[LoginName] AS [LoginName], 
+[UserManagement].[Password] AS [Password], 
+[UserManagement].[UserCategory] AS [UserCategory]
+FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
             <End Role="JobRate" EntitySet="JobRate" />
             <End Role="Employee" EntitySet="Employee" />
@@ -306,8 +325,7 @@
             <End Role="WorkerAllocation" EntitySet="WorkerAllocation" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MACBuildersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -408,7 +426,7 @@
           <Property Name="PaymentType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="PaymentDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Project" Relationship="Self.FK_ProjectPayment_Project" FromRole="ProjectPayment" ToRole="Project" />
         </EntityType>
         <EntityType Name="Supplier">
@@ -598,7 +616,18 @@
             <End Role="Supplier" EntitySet="Suppliers" />
             <End Role="Project" EntitySet="Projects" />
           </AssociationSet>
+          <EntitySet Name="UserManagements" EntityType="MACBuildersModel.UserManagement" />
         </EntityContainer>
+        <EntityType Name="UserManagement">
+          <Key>
+            <PropertyRef Name="LoginName" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="UserCategory" />
+          </Key>
+          <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="UserCategory" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -724,6 +753,15 @@
               <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="UserManagements">
+            <EntityTypeMapping TypeName="MACBuildersModel.UserManagement">
+              <MappingFragment StoreEntitySet="UserManagement">
+                <ScalarProperty Name="UserCategory" ColumnName="UserCategory" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

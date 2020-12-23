@@ -34,5 +34,6 @@ namespace DBMSProjet.Database
         public DbSet<ProjectPayment> ProjectPayments { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<WorkerAllocation> WorkerAllocations { get; set; }
+        public DbSet<UserManagement> UserManagements { get; set; }
     }
 }
