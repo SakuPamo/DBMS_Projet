@@ -34,6 +34,7 @@ namespace DBMSProjet.Database
         public string ProjectConsultant { get; set; }
         public string ProjectManager { get; set; }
         public string Client { get; set; }
+        public string status { get; set; }
     
         public virtual Client Client1 { get; set; }
         public virtual Employee Employee { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DBMSProjet.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +11,28 @@ namespace DBMSProjet.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Globle.userManegement == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            if (Globle.userManegement.UserCategory == "Admin")
+            {
+                return View("DasboardAdmin");
+            }
+            else if (Globle.userManegement.UserCategory == "Consultant")
+            {
+                return View("DashboardConsultant");
+            }
+            else if(Globle.userManegement.UserCategory == "Customer")
+            {
+                return View("DashboardCustomer");
+            }
+            else
+            {
+                return View("DasboardAdmin");
+            }
+            
         }
 
         public ActionResult About()

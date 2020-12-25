@@ -76,6 +76,7 @@
           <Property Name="ProjectConsultant" Type="varchar" MaxLength="15" />
           <Property Name="ProjectManager" Type="varchar" MaxLength="15" />
           <Property Name="Client" Type="varchar" MaxLength="15" />
+          <Property Name="status" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ProjectPayment">
           <Key>
@@ -116,10 +117,16 @@ warning 6002: The table/view 'MACBuilders.dbo.UserManagement' does not have a pr
             <PropertyRef Name="LoginName" />
             <PropertyRef Name="Password" />
             <PropertyRef Name="UserCategory" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="email" />
           </Key>
           <Property Name="LoginName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="UserCategory" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="WorkerAllocation">
           <Key>
@@ -277,7 +284,10 @@ warning 6002: The table/view 'MACBuilders.dbo.UserManagement' does not have a pr
             <DefiningQuery>SELECT 
 [UserManagement].[LoginName] AS [LoginName], 
 [UserManagement].[Password] AS [Password], 
-[UserManagement].[UserCategory] AS [UserCategory]
+[UserManagement].[UserCategory] AS [UserCategory], 
+[UserManagement].[FirstName] AS [FirstName], 
+[UserManagement].[LastName] AS [LastName], 
+[UserManagement].[email] AS [email]
 FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
@@ -329,134 +339,203 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MACBuildersModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MACBuildersEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="MACBuildersModel.Client" />
+          <EntitySet Name="Employees" EntityType="MACBuildersModel.Employee" />
+          <EntitySet Name="Equipments" EntityType="MACBuildersModel.Equipment" />
+          <EntitySet Name="EquipmentAllocations" EntityType="MACBuildersModel.EquipmentAllocation" />
+          <EntitySet Name="JobRates" EntityType="MACBuildersModel.JobRate" />
+          <EntitySet Name="Projects" EntityType="MACBuildersModel.Project" />
+          <EntitySet Name="ProjectPayments" EntityType="MACBuildersModel.ProjectPayment" />
+          <EntitySet Name="Suppliers" EntityType="MACBuildersModel.Supplier" />
+          <EntitySet Name="WorkerAllocations" EntityType="MACBuildersModel.WorkerAllocation" />
+          <EntitySet Name="UserManagements" EntityType="MACBuildersModel.UserManagement" />
+          <AssociationSet Name="FK_Project_Client" Association="MACBuildersModel.FK_Project_Client">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Employee" Association="MACBuildersModel.FK_Employee_Employee">
+            <End Role="JobRate" EntitySet="JobRates" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_Consultant" Association="MACBuildersModel.FK_Project_Consultant">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Project_Manager" Association="MACBuildersModel.FK_Project_Manager">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WorkerAllocation_Worker" Association="MACBuildersModel.FK_WorkerAllocation_Worker">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="WorkerAllocation" EntitySet="WorkerAllocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipmentAllocation_Equipment" Association="MACBuildersModel.FK_EquipmentAllocation_Equipment">
+            <End Role="Equipment" EntitySet="Equipments" />
+            <End Role="EquipmentAllocation" EntitySet="EquipmentAllocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipmentAllocation_Project" Association="MACBuildersModel.FK_EquipmentAllocation_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="EquipmentAllocation" EntitySet="EquipmentAllocations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectPayment_Project" Association="MACBuildersModel.FK_ProjectPayment_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="ProjectPayment" EntitySet="ProjectPayments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WorkerAllocation_Project" Association="MACBuildersModel.FK_WorkerAllocation_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="WorkerAllocation" EntitySet="WorkerAllocations" />
+          </AssociationSet>
+          <AssociationSet Name="SupplierHiring" Association="MACBuildersModel.SupplierHiring">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Project" EntitySet="Projects" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="ClientID" />
           </Key>
-          <Property Name="ClientID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClientID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="AddressLine1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AddressLine1" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="AddressLine2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ContactNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Projects" Relationship="Self.FK_Project_Client" FromRole="Client" ToRole="Project" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Projects" Relationship="MACBuildersModel.FK_Project_Client" FromRole="Client" ToRole="Project" />
         </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="EmployeeID" />
           </Key>
-          <Property Name="EmployeeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AddressLine1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AddressLine1" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="AddressLine2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ContactNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="WorkCategory" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="JobTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="JobRate" Relationship="Self.FK_Employee_Employee" FromRole="Employee" ToRole="JobRate" />
-          <NavigationProperty Name="Projects" Relationship="Self.FK_Project_Consultant" FromRole="Employee" ToRole="Project" />
-          <NavigationProperty Name="Projects1" Relationship="Self.FK_Project_Manager" FromRole="Employee" ToRole="Project" />
-          <NavigationProperty Name="WorkerAllocations" Relationship="Self.FK_WorkerAllocation_Worker" FromRole="Employee" ToRole="WorkerAllocation" />
+          <Property Name="JobTitle" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="JobRate" Relationship="MACBuildersModel.FK_Employee_Employee" FromRole="Employee" ToRole="JobRate" />
+          <NavigationProperty Name="Projects" Relationship="MACBuildersModel.FK_Project_Consultant" FromRole="Employee" ToRole="Project" />
+          <NavigationProperty Name="Projects1" Relationship="MACBuildersModel.FK_Project_Manager" FromRole="Employee" ToRole="Project" />
+          <NavigationProperty Name="WorkerAllocations" Relationship="MACBuildersModel.FK_WorkerAllocation_Worker" FromRole="Employee" ToRole="WorkerAllocation" />
         </EntityType>
         <EntityType Name="Equipment">
           <Key>
             <PropertyRef Name="EquipmentID" />
           </Key>
-          <Property Name="EquipmentID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="EquipmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EquipmentID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="EquipmentName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="EquipmentAllocations" Relationship="Self.FK_EquipmentAllocation_Equipment" FromRole="Equipment" ToRole="EquipmentAllocation" />
+          <NavigationProperty Name="EquipmentAllocations" Relationship="MACBuildersModel.FK_EquipmentAllocation_Equipment" FromRole="Equipment" ToRole="EquipmentAllocation" />
         </EntityType>
         <EntityType Name="EquipmentAllocation">
           <Key>
             <PropertyRef Name="EquipmentID" />
             <PropertyRef Name="ProjectID" />
           </Key>
-          <Property Name="EquipmentID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ProjectID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EquipmentID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Duration" Type="Int32" Nullable="false" />
           <Property Name="Qty" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Equipment" Relationship="Self.FK_EquipmentAllocation_Equipment" FromRole="EquipmentAllocation" ToRole="Equipment" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_EquipmentAllocation_Project" FromRole="EquipmentAllocation" ToRole="Project" />
+          <NavigationProperty Name="Equipment" Relationship="MACBuildersModel.FK_EquipmentAllocation_Equipment" FromRole="EquipmentAllocation" ToRole="Equipment" />
+          <NavigationProperty Name="Project" Relationship="MACBuildersModel.FK_EquipmentAllocation_Project" FromRole="EquipmentAllocation" ToRole="Project" />
         </EntityType>
         <EntityType Name="JobRate">
           <Key>
             <PropertyRef Name="JobTitle" />
           </Key>
-          <Property Name="JobTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Rate" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="Employees" Relationship="Self.FK_Employee_Employee" FromRole="JobRate" ToRole="Employee" />
+          <Property Name="JobTitle" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Rate" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Employees" Relationship="MACBuildersModel.FK_Employee_Employee" FromRole="JobRate" ToRole="Employee" />
         </EntityType>
         <EntityType Name="Project">
           <Key>
             <PropertyRef Name="ProjectID" />
           </Key>
-          <Property Name="ProjectID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="BusinessName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Location" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="ServiceCharge" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="ConsultantFee" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="PersonnelCost" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ServiceCharge" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ConsultantFee" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="PersonnelCost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="ProjectConsultant" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="ProjectManager" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Client" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Client1" Relationship="Self.FK_Project_Client" FromRole="Project" ToRole="Client" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_Project_Consultant" FromRole="Project" ToRole="Employee" />
-          <NavigationProperty Name="Employee1" Relationship="Self.FK_Project_Manager" FromRole="Project" ToRole="Employee" />
-          <NavigationProperty Name="EquipmentAllocations" Relationship="Self.FK_EquipmentAllocation_Project" FromRole="Project" ToRole="EquipmentAllocation" />
-          <NavigationProperty Name="ProjectPayments" Relationship="Self.FK_ProjectPayment_Project" FromRole="Project" ToRole="ProjectPayment" />
-          <NavigationProperty Name="WorkerAllocations" Relationship="Self.FK_WorkerAllocation_Project" FromRole="Project" ToRole="WorkerAllocation" />
-          <NavigationProperty Name="Suppliers" Relationship="Self.SupplierHiring" FromRole="Project" ToRole="Supplier" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Client1" Relationship="MACBuildersModel.FK_Project_Client" FromRole="Project" ToRole="Client" />
+          <NavigationProperty Name="Employee" Relationship="MACBuildersModel.FK_Project_Consultant" FromRole="Project" ToRole="Employee" />
+          <NavigationProperty Name="Employee1" Relationship="MACBuildersModel.FK_Project_Manager" FromRole="Project" ToRole="Employee" />
+          <NavigationProperty Name="EquipmentAllocations" Relationship="MACBuildersModel.FK_EquipmentAllocation_Project" FromRole="Project" ToRole="EquipmentAllocation" />
+          <NavigationProperty Name="ProjectPayments" Relationship="MACBuildersModel.FK_ProjectPayment_Project" FromRole="Project" ToRole="ProjectPayment" />
+          <NavigationProperty Name="WorkerAllocations" Relationship="MACBuildersModel.FK_WorkerAllocation_Project" FromRole="Project" ToRole="WorkerAllocation" />
+          <NavigationProperty Name="Suppliers" Relationship="MACBuildersModel.SupplierHiring" FromRole="Project" ToRole="Supplier" />
         </EntityType>
         <EntityType Name="ProjectPayment">
           <Key>
             <PropertyRef Name="ProjectID" />
             <PropertyRef Name="PaymentType" />
           </Key>
-          <Property Name="ProjectID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="PaymentType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="PaymentDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="InvoiceNo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_ProjectPayment_Project" FromRole="ProjectPayment" ToRole="Project" />
+          <Property Name="InvoiceNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Project" Relationship="MACBuildersModel.FK_ProjectPayment_Project" FromRole="ProjectPayment" ToRole="Project" />
         </EntityType>
         <EntityType Name="Supplier">
           <Key>
             <PropertyRef Name="SupplierID" />
           </Key>
-          <Property Name="SupplierID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SupplierName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="AddressLine1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SupplierID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="SupplierName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AddressLine1" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="AddressLine2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ContactNo" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Projects" Relationship="Self.SupplierHiring" FromRole="Supplier" ToRole="Project" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContactNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Projects" Relationship="MACBuildersModel.SupplierHiring" FromRole="Supplier" ToRole="Project" />
         </EntityType>
         <EntityType Name="WorkerAllocation">
           <Key>
             <PropertyRef Name="WorkerID" />
             <PropertyRef Name="ProjectID" />
           </Key>
-          <Property Name="WorkerID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ProjectID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WorkerID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="WorkingDays" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_WorkerAllocation_Worker" FromRole="WorkerAllocation" ToRole="Employee" />
-          <NavigationProperty Name="Project" Relationship="Self.FK_WorkerAllocation_Project" FromRole="WorkerAllocation" ToRole="Project" />
+          <NavigationProperty Name="Employee" Relationship="MACBuildersModel.FK_WorkerAllocation_Worker" FromRole="WorkerAllocation" ToRole="Employee" />
+          <NavigationProperty Name="Project" Relationship="MACBuildersModel.FK_WorkerAllocation_Project" FromRole="WorkerAllocation" ToRole="Project" />
+        </EntityType>
+        <EntityType Name="UserManagement">
+          <Key>
+            <PropertyRef Name="LoginName" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="UserCategory" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="UserCategory" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
         </EntityType>
         <Association Name="FK_Project_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
-          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <End Type="MACBuildersModel.Client" Role="Client" Multiplicity="0..1" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Client">
               <PropertyRef Name="ClientID" />
@@ -467,8 +546,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Employee_Employee">
-          <End Role="JobRate" Type="Self.JobRate" Multiplicity="1" />
-          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <End Type="MACBuildersModel.JobRate" Role="JobRate" Multiplicity="1" />
+          <End Type="MACBuildersModel.Employee" Role="Employee" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="JobRate">
               <PropertyRef Name="JobTitle" />
@@ -479,8 +558,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Project_Consultant">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <End Type="MACBuildersModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="EmployeeID" />
@@ -491,8 +570,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Project_Manager">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <End Type="MACBuildersModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="EmployeeID" />
@@ -503,8 +582,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WorkerAllocation_Worker">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
-          <End Role="WorkerAllocation" Type="Self.WorkerAllocation" Multiplicity="*" />
+          <End Type="MACBuildersModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="MACBuildersModel.WorkerAllocation" Role="WorkerAllocation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Employee">
               <PropertyRef Name="EmployeeID" />
@@ -515,8 +594,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EquipmentAllocation_Equipment">
-          <End Role="Equipment" Type="Self.Equipment" Multiplicity="1" />
-          <End Role="EquipmentAllocation" Type="Self.EquipmentAllocation" Multiplicity="*" />
+          <End Type="MACBuildersModel.Equipment" Role="Equipment" Multiplicity="1" />
+          <End Type="MACBuildersModel.EquipmentAllocation" Role="EquipmentAllocation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Equipment">
               <PropertyRef Name="EquipmentID" />
@@ -527,8 +606,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_EquipmentAllocation_Project">
-          <End Role="Project" Type="Self.Project" Multiplicity="1" />
-          <End Role="EquipmentAllocation" Type="Self.EquipmentAllocation" Multiplicity="*" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="MACBuildersModel.EquipmentAllocation" Role="EquipmentAllocation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Project">
               <PropertyRef Name="ProjectID" />
@@ -539,8 +618,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ProjectPayment_Project">
-          <End Role="Project" Type="Self.Project" Multiplicity="1" />
-          <End Role="ProjectPayment" Type="Self.ProjectPayment" Multiplicity="*" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="MACBuildersModel.ProjectPayment" Role="ProjectPayment" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Project">
               <PropertyRef Name="ProjectID" />
@@ -551,8 +630,8 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_WorkerAllocation_Project">
-          <End Role="Project" Type="Self.Project" Multiplicity="1" />
-          <End Role="WorkerAllocation" Type="Self.WorkerAllocation" Multiplicity="*" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="MACBuildersModel.WorkerAllocation" Role="WorkerAllocation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Project">
               <PropertyRef Name="ProjectID" />
@@ -563,71 +642,9 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           </ReferentialConstraint>
         </Association>
         <Association Name="SupplierHiring">
-          <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
-          <End Role="Project" Type="Self.Project" Multiplicity="*" />
+          <End Type="MACBuildersModel.Supplier" Role="Supplier" Multiplicity="*" />
+          <End Type="MACBuildersModel.Project" Role="Project" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="MACBuildersEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Clients" EntityType="Self.Client" />
-          <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <EntitySet Name="Equipments" EntityType="Self.Equipment" />
-          <EntitySet Name="EquipmentAllocations" EntityType="Self.EquipmentAllocation" />
-          <EntitySet Name="JobRates" EntityType="Self.JobRate" />
-          <EntitySet Name="Projects" EntityType="Self.Project" />
-          <EntitySet Name="ProjectPayments" EntityType="Self.ProjectPayment" />
-          <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
-          <EntitySet Name="WorkerAllocations" EntityType="Self.WorkerAllocation" />
-          <AssociationSet Name="FK_Project_Client" Association="Self.FK_Project_Client">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="Project" EntitySet="Projects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Employee_Employee" Association="Self.FK_Employee_Employee">
-            <End Role="JobRate" EntitySet="JobRates" />
-            <End Role="Employee" EntitySet="Employees" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Project_Consultant" Association="Self.FK_Project_Consultant">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Project" EntitySet="Projects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Project_Manager" Association="Self.FK_Project_Manager">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Project" EntitySet="Projects" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WorkerAllocation_Worker" Association="Self.FK_WorkerAllocation_Worker">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="WorkerAllocation" EntitySet="WorkerAllocations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EquipmentAllocation_Equipment" Association="Self.FK_EquipmentAllocation_Equipment">
-            <End Role="Equipment" EntitySet="Equipments" />
-            <End Role="EquipmentAllocation" EntitySet="EquipmentAllocations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EquipmentAllocation_Project" Association="Self.FK_EquipmentAllocation_Project">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="EquipmentAllocation" EntitySet="EquipmentAllocations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProjectPayment_Project" Association="Self.FK_ProjectPayment_Project">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="ProjectPayment" EntitySet="ProjectPayments" />
-          </AssociationSet>
-          <AssociationSet Name="FK_WorkerAllocation_Project" Association="Self.FK_WorkerAllocation_Project">
-            <End Role="Project" EntitySet="Projects" />
-            <End Role="WorkerAllocation" EntitySet="WorkerAllocations" />
-          </AssociationSet>
-          <AssociationSet Name="SupplierHiring" Association="Self.SupplierHiring">
-            <End Role="Supplier" EntitySet="Suppliers" />
-            <End Role="Project" EntitySet="Projects" />
-          </AssociationSet>
-          <EntitySet Name="UserManagements" EntityType="MACBuildersModel.UserManagement" />
-        </EntityContainer>
-        <EntityType Name="UserManagement">
-          <Key>
-            <PropertyRef Name="LoginName" />
-            <PropertyRef Name="Password" />
-            <PropertyRef Name="UserCategory" />
-          </Key>
-          <Property Name="LoginName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Password" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="UserCategory" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -637,131 +654,135 @@ FROM [dbo].[UserManagement] AS [UserManagement]</DefiningQuery>
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="MACBuildersModel.Client">
               <MappingFragment StoreEntitySet="Client">
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
-                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="MACBuildersModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
-                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="WorkCategory" ColumnName="WorkCategory" />
                 <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="WorkCategory" ColumnName="WorkCategory" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Equipments">
             <EntityTypeMapping TypeName="MACBuildersModel.Equipment">
               <MappingFragment StoreEntitySet="Equipment">
-                <ScalarProperty Name="EquipmentID" ColumnName="EquipmentID" />
-                <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
+                <ScalarProperty Name="EquipmentID" ColumnName="EquipmentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EquipmentAllocations">
             <EntityTypeMapping TypeName="MACBuildersModel.EquipmentAllocation">
               <MappingFragment StoreEntitySet="EquipmentAllocation">
-                <ScalarProperty Name="EquipmentID" ColumnName="EquipmentID" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="EquipmentID" ColumnName="EquipmentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="JobRates">
             <EntityTypeMapping TypeName="MACBuildersModel.JobRate">
               <MappingFragment StoreEntitySet="JobRate">
-                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Projects">
             <EntityTypeMapping TypeName="MACBuildersModel.Project">
               <MappingFragment StoreEntitySet="Project">
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
-                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-                <ScalarProperty Name="ServiceCharge" ColumnName="ServiceCharge" />
-                <ScalarProperty Name="ConsultantFee" ColumnName="ConsultantFee" />
-                <ScalarProperty Name="PersonnelCost" ColumnName="PersonnelCost" />
-                <ScalarProperty Name="ProjectConsultant" ColumnName="ProjectConsultant" />
-                <ScalarProperty Name="ProjectManager" ColumnName="ProjectManager" />
+                <ScalarProperty Name="status" ColumnName="status" />
                 <ScalarProperty Name="Client" ColumnName="Client" />
+                <ScalarProperty Name="ProjectManager" ColumnName="ProjectManager" />
+                <ScalarProperty Name="ProjectConsultant" ColumnName="ProjectConsultant" />
+                <ScalarProperty Name="PersonnelCost" ColumnName="PersonnelCost" />
+                <ScalarProperty Name="ConsultantFee" ColumnName="ConsultantFee" />
+                <ScalarProperty Name="ServiceCharge" ColumnName="ServiceCharge" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProjectPayments">
             <EntityTypeMapping TypeName="MACBuildersModel.ProjectPayment">
               <MappingFragment StoreEntitySet="ProjectPayment">
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Suppliers">
             <EntityTypeMapping TypeName="MACBuildersModel.Supplier">
               <MappingFragment StoreEntitySet="Supplier">
-                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
-                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
-                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="WorkerAllocations">
             <EntityTypeMapping TypeName="MACBuildersModel.WorkerAllocation">
               <MappingFragment StoreEntitySet="WorkerAllocation">
-                <ScalarProperty Name="WorkerID" ColumnName="WorkerID" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="WorkingDays" ColumnName="WorkingDays" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="WorkerID" ColumnName="WorkerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="SupplierHiring" TypeName="MACBuildersModel.SupplierHiring" StoreEntitySet="SupplierHiring">
-            <EndProperty Name="Supplier">
-              <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
-            </EndProperty>
-            <EndProperty Name="Project">
-              <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-            </EndProperty>
-          </AssociationSetMapping>
           <EntitySetMapping Name="UserManagements">
             <EntityTypeMapping TypeName="MACBuildersModel.UserManagement">
               <MappingFragment StoreEntitySet="UserManagement">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserCategory" ColumnName="UserCategory" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="LoginName" ColumnName="LoginName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="SupplierHiring" TypeName="MACBuildersModel.SupplierHiring" StoreEntitySet="SupplierHiring">
+            <EndProperty Name="Project">
+              <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+            </EndProperty>
+            <EndProperty Name="Supplier">
+              <ScalarProperty Name="SupplierID" ColumnName="SupplierID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
